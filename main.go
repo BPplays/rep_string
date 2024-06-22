@@ -27,25 +27,27 @@ func main() {
 
 	}
 
-	// Access flag values
-	filePath := *fileFlag
-	repValue := *repFlag
 
-	replacement := ""
 
-	if filePath != "" {
-		inf, err := os.ReadFile(filePath)
-		if err != nil {
-			fmt.Println(err)
-		}
-		
-		// replacement := os.Args[3]
-		replacement = string(inf)
-	} else if repValue != "" {
-		replacement = repValue
-	} else {
+
+	// Check if at least one flag is set
+	if *fileFlag == "" && *repFlag == "" {
 		fmt.Println("Please specify either -f or -r flag.")
 		os.Exit(1)
+	}
+
+	// Access flag values
+	var replacement string
+
+	if *fileFlag != "" {
+		inf, err := os.ReadFile(*fileFlag)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+		replacement = string(inf)
+	} else {
+		replacement = *repFlag
 	}
 
 
