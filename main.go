@@ -1,15 +1,16 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/spf13/pflag"
 )
 
 func main() {
-	if len(os.Args) < 4 {
+	if len(os.Args) < 3 {
 		fmt.Println("Usage: go run main.go <dir> <placeholder> <replacement>")
 		return
 	}
@@ -17,21 +18,21 @@ func main() {
 	dir := os.Args[1]
 	placeholder := os.Args[2]
 
-	fileFlag := flag.String("f", "", "Specify a file")
-	repFlag := flag.String("r", "", "Specify a regex pattern")
 
-	// Parse command-line flags
-	flag.Parse()
+	var fileFlag string
+	var repFlag string
+	pflag.StringVarP(&fileFlag, "file", "f", "", "file to read from")
+	pflag.StringVarP(&fileFlag, "rep", "r", "", "replace")
 
-	if *fileFlag == "" && *repFlag == "" {
 
-	}
+
+	pflag.Parse()
 
 
 
 
 	// Check if at least one flag is set
-	if *fileFlag == "" && *repFlag == "" {
+	if fileFlag == "" && repFlag == "" {
 		fmt.Println("Please specify either -f or -r flag.")
 		os.Exit(1)
 	}
@@ -39,15 +40,15 @@ func main() {
 	// Access flag values
 	var replacement string
 
-	if *fileFlag != "" {
-		inf, err := os.ReadFile(*fileFlag)
+	if fileFlag != "" {
+		inf, err := os.ReadFile(fileFlag)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
 		replacement = string(inf)
 	} else {
-		replacement = *repFlag
+		replacement = repFlag
 	}
 
 
