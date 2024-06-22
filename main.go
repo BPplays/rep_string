@@ -21,32 +21,31 @@ func main() {
 
     pflag.Parse()
 
-    if viper.IsSet("file") {
-        replacement = viper.GetString("file")
-    }
-    if viper.IsSet("rep") {
-        replacement = viper.GetString("rep")
-    }
-    if viper.IsSet("dir") {
-        dir = viper.GetString("dir")
-    }
-    if viper.IsSet("placeholder") {
-        placeholder = viper.GetString("placeholder")
-    }
+
+	fileFlag = viper.GetString("file")
+
+	repFlag = viper.GetString("rep")
+	dir = viper.GetString("dir")
+	placeholder = viper.GetString("placeholder")
+
+	if repFlag != "" {
+		replacement = repFlag
+	} else {
+		replacement = fileFlag
+	}
 
     // Check if at least one flag is set
     fmt.Printf("fileFlag: %s\n", fileFlag)
     fmt.Printf("repFlag: %s\n", repFlag)
+    fmt.Printf("dir: %s\n", dir)
+    fmt.Printf("placeholder: %s\n", placeholder)
     fmt.Printf("replacement: %s\n", replacement)
     if replacement == "" {
         fmt.Println("Please specify either -f or -r flag.")
         os.Exit(1)
     }
 
-    fmt.Printf("fileFlag: %s\n", fileFlag)
-    fmt.Printf("repFlag: %s\n", repFlag)
-    fmt.Printf("dir: %s\n", dir)
-    fmt.Printf("placeholder: %s\n", placeholder)
+
 
 
 	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
