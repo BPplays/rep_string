@@ -26,7 +26,12 @@ func main() {
     if repFlag != "" {
         replacement = repFlag
     } else {
-        replacement = fileFlag
+		inf, err := os.ReadFile(fileFlag)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+        replacement = string(inf)
     }
     // Output the values
     fmt.Printf("fileFlag: %s\n", fileFlag)
