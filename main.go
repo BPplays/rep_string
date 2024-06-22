@@ -16,14 +16,17 @@ func main() {
 		return
 	}
 
-	dir := os.Args[1]
-	placeholder := os.Args[2]
+	dir := ""
+	placeholder := ""
 
 
 	var fileFlag string
 	var repFlag string
 	pflag.StringP("file", "f", "", "file to read from")
 	pflag.StringP("rep", "r", "", "replace")
+
+	pflag.StringP("dir", "d", "", "file to read from")
+	pflag.StringP("plahol", "p", "", "replace")
 
 
 
@@ -43,6 +46,24 @@ func main() {
 		fmt.Println("Please specify either -f or -r flag.")
 		fmt.Println(viper.GetString("rep"))
 		fmt.Println(viper.GetString("file"))
+		os.Exit(1)
+	}
+
+	// Check if at least one flag is set
+	if viper.IsSet("dir") {
+		dir = viper.GetString("dir")
+	} else {
+		fmt.Println("Please specify either -f or -r flag.")
+		fmt.Println(viper.GetString("dir"))
+		os.Exit(1)
+	}
+
+	// Check if at least one flag is set
+	if viper.IsSet("plahol") {
+		placeholder = viper.GetString("plahol")
+	} else {
+		fmt.Println("Please specify either -f or -r flag.")
+		fmt.Println(viper.GetString("plahol"))
 		os.Exit(1)
 	}
 
