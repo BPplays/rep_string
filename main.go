@@ -12,9 +12,7 @@ import (
 
 func main() {
 
-	fileoverrep := false
-
-    var fileFlag, repFlag, dir, placeholder string
+    var fileFlag, repFlag, dir, placeholder, replacement string
 
     pflag.StringP("file", "f", "", "file to read from")
     pflag.StringP("rep", "r", "", "replace")
@@ -24,16 +22,10 @@ func main() {
     pflag.Parse()
 
     if viper.IsSet("file") {
-        fileFlag = viper.GetString("file")
-		fileoverrep = true
+        replacement = viper.GetString("file")
     }
     if viper.IsSet("rep") {
-        repFlag = viper.GetString("rep")
-		if fileoverrep {
-			fmt.Println("Please specify -f OR -r")
-			os.Exit(1)
-		}
-		fileoverrep = false
+        replacement = viper.GetString("rep")
     }
     if viper.IsSet("dir") {
         dir = viper.GetString("dir")
@@ -43,24 +35,15 @@ func main() {
     }
 
     // Check if at least one flag is set
-    if fileFlag == "" && repFlag == "" && dir == ""  && placeholder == ""   {
-        fmt.Println("Please specify (-f or -r) and -d and -p flag.")
+    if fileFlag == "" && repFlag == "" {
+        fmt.Println("Please specify either -f or -r flag.")
         os.Exit(1)
     }
 
-	// Access flag values
-	var replacement string
-
-	if fileoverrep {
-		inf, err := os.ReadFile(fileFlag)
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-		replacement = string(inf)
-	} else {
-		replacement = repFlag
-	}
+    fmt.Printf("fileFlag: %s\n", fileFlag)
+    fmt.Printf("repFlag: %s\n", repFlag)
+    fmt.Printf("dir: %s\n", dir)
+    fmt.Printf("placeholder: %s\n", placeholder)
 
 
 	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
