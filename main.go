@@ -41,6 +41,8 @@ func main() {
 		fileoverrep = false
 	} else {
 		fmt.Println("Please specify either -f or -r flag.")
+		fmt.Println(viper.GetString("rep"))
+		fmt.Println(viper.GetString("file"))
 		os.Exit(1)
 	}
 
