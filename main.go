@@ -42,7 +42,7 @@ func processFile(filePath, placeholder, replacement string) error {
     if err != nil {
         return err
     }
-
+	
     output := strings.ReplaceAll(string(input), placeholder, replacement)
 
     err = os.WriteFile(filePath, []byte(output), 0644)
