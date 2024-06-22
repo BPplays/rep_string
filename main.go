@@ -35,6 +35,9 @@ func main() {
     }
 
     // Check if at least one flag is set
+    fmt.Printf("fileFlag: %s\n", fileFlag)
+    fmt.Printf("repFlag: %s\n", repFlag)
+    fmt.Printf("replacement: %s\n", replacement)
     if replacement == "" {
         fmt.Println("Please specify either -f or -r flag.")
         os.Exit(1)
