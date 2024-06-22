@@ -14,36 +14,34 @@ func main() {
 
     var fileFlag, repFlag, dir, placeholder, replacement string
 
-    pflag.StringP("file", "f", "", "file to read from")
-    pflag.StringP("rep", "r", "", "replace")
-    pflag.StringP("dir", "d", "", "directory")
-    pflag.StringP("placeholder", "p", "", "placeholder")
+    pflag.StringVarP(&fileFlag, "file", "f", "", "file to read from")
+    pflag.StringVarP(&repFlag, "rep", "r", "", "replace")
+    pflag.StringVarP(&dir, "dir", "d", "", "directory")
+    pflag.StringVarP(&placeholder, "placeholder", "p", "", "placeholder")
 
     pflag.Parse()
+    viper.BindPFlags(pflag.CommandLine) // Bind pflag to viper
 
-
-	fileFlag = viper.GetString("file")
-
-	repFlag = viper.GetString("rep")
-	dir = viper.GetString("dir")
-	placeholder = viper.GetString("placeholder")
-
-	if repFlag != "" {
-		replacement = repFlag
-	} else {
-		replacement = fileFlag
-	}
-
-    // Check if at least one flag is set
+    // Decide on the replacement based on flags
+    if repFlag != "" {
+        replacement = repFlag
+    } else {
+        replacement = fileFlag
+    }
+    // Output the values
     fmt.Printf("fileFlag: %s\n", fileFlag)
     fmt.Printf("repFlag: %s\n", repFlag)
     fmt.Printf("dir: %s\n", dir)
     fmt.Printf("placeholder: %s\n", placeholder)
     fmt.Printf("replacement: %s\n", replacement)
+    // Check if at least one flag is set
     if replacement == "" {
         fmt.Println("Please specify either -f or -r flag.")
         os.Exit(1)
     }
+
+
+
 
 
 
