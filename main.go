@@ -11,61 +11,42 @@ import (
 )
 
 func main() {
-	if len(os.Args) < 3 {
-		fmt.Println("Usage: go run main.go <dir> <placeholder> <replacement>")
-		return
-	}
-
-	dir := ""
-	placeholder := ""
-
-
-	var fileFlag string
-	var repFlag string
-	pflag.StringP("file", "f", "", "file to read from")
-	pflag.StringP("rep", "r", "", "replace")
-
-	pflag.StringP("dir", "d", "", "file to read from")
-	pflag.StringP("plahol", "p", "", "replace")
-
-
-
-	pflag.Parse()
 
 	fileoverrep := false
 
+    var fileFlag, repFlag, dir, placeholder string
 
-	// Check if at least one flag is set
-	if viper.IsSet("file") {
-		fileFlag = viper.GetString("file")
+    pflag.StringP("file", "f", "", "file to read from")
+    pflag.StringP("rep", "r", "", "replace")
+    pflag.StringP("dir", "d", "", "directory")
+    pflag.StringP("placeholder", "p", "", "placeholder")
+
+    pflag.Parse()
+
+    if viper.IsSet("file") {
+        fileFlag = viper.GetString("file")
 		fileoverrep = true
-	} else if viper.IsSet("rep") {
-		repFlag = viper.GetString("rep")
+    }
+    if viper.IsSet("rep") {
+        repFlag = viper.GetString("rep")
+		if fileoverrep {
+			fmt.Println("Please specify -f OR -r")
+			os.Exit(1)
+		}
 		fileoverrep = false
-	} else {
-		fmt.Println("Please specify either -f or -r flag.")
-		fmt.Println(viper.GetString("rep"))
-		fmt.Println(viper.GetString("file"))
-		os.Exit(1)
-	}
+    }
+    if viper.IsSet("dir") {
+        dir = viper.GetString("dir")
+    }
+    if viper.IsSet("placeholder") {
+        placeholder = viper.GetString("placeholder")
+    }
 
-	// Check if at least one flag is set
-	if viper.IsSet("dir") {
-		dir = viper.GetString("dir")
-	} else {
-		fmt.Println("Please specify either -f or -r flag.")
-		fmt.Println(viper.GetString("dir"))
-		os.Exit(1)
-	}
-
-	// Check if at least one flag is set
-	if viper.IsSet("plahol") {
-		placeholder = viper.GetString("plahol")
-	} else {
-		fmt.Println("Please specify either -f or -r flag.")
-		fmt.Println(viper.GetString("plahol"))
-		os.Exit(1)
-	}
+    // Check if at least one flag is set
+    if fileFlag == "" && repFlag == "" && dir == ""  && placeholder == ""   {
+        fmt.Println("Please specify (-f or -r) and -d and -p flag.")
+        os.Exit(1)
+    }
 
 	// Access flag values
 	var replacement string
