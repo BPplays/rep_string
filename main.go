@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/spf13/pflag"
+	"github.com/spf13/viper"
 )
 
 func main() {
@@ -21,18 +22,24 @@ func main() {
 
 	var fileFlag string
 	var repFlag string
-	pflag.StringVarP(&fileFlag, "file", "f", "", "file to read from")
-	pflag.StringVarP(&fileFlag, "rep", "r", "", "replace")
+	pflag.StringP("file", "f", "", "file to read from")
+	pflag.StringP("rep", "r", "", "replace")
 
 
 
 	pflag.Parse()
 
-
+	fileoverrep := false
 
 
 	// Check if at least one flag is set
-	if fileFlag == "" && repFlag == "" {
+	if viper.IsSet("file") {
+		fileFlag = viper.GetString("file")
+		fileoverrep = true
+	} else if viper.IsSet("rep") {
+		repFlag = viper.GetString("rep")
+		fileoverrep = false
+	} else {
 		fmt.Println("Please specify either -f or -r flag.")
 		os.Exit(1)
 	}
@@ -40,7 +47,7 @@ func main() {
 	// Access flag values
 	var replacement string
 
-	if fileFlag != "" {
+	if fileoverrep {
 		inf, err := os.ReadFile(fileFlag)
 		if err != nil {
 			fmt.Println(err)
